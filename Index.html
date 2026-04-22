@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lesile Mumbi — Virtual Assistant & Tech Professional</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0c0a;
+      --surface: #161310;
+      --card: #1c1915;
+      --border: rgba(255,255,255,0.07);
+      --gold: #c9a96e;
+      --gold-light: #dfc28f;
+      --text: #f0ece4;
+      --muted: rgba(240,236,228,0.45);
+      --subtle: rgba(240,236,228,0.22);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: auto;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+    }
+
+    /* ─── CURSOR ─── */
+    .cursor {
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,169,110,0.4);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transition: width 0.3s, height 0.3s, border-color 0.3s;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 6vw;
+      background: rgba(14,12,10,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 500;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); font-style: italic; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.73rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      position: relative; transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 100%;
+      height: 1px; background: var(--gold);
+      transition: right 0.35s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { right: 0; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 130px 10vw 90px;
+      position: relative; overflow: hidden;
+      scroll-margin-top: 80px;
+    }
+    /* background architectural lines */
+    .hero::before, .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent 0%, var(--border) 15%, var(--border) 85%, transparent 100%);
+    }
+    .hero::before { right: 22vw; }
+    .hero::after { right: 8vw; background: linear-gradient(to bottom, transparent 0%, rgba(201,169,110,0.07) 20%, rgba(201,169,110,0.07) 80%, transparent 100%); }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 2.2rem;
+      opacity: 0; animation: fromLeft 0.9s 0.15s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 36px; height: 1px; background: var(--gold);
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 9vw, 8rem);
+      font-weight: 400; line-height: 0.95;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.2em;
+      opacity: 0; animation: fromLeft 1s 0.3s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    h1 em { font-style: italic; color: var(--gold); }
+    .hero-role {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 1.8vw, 1.35rem);
+      font-style: italic; font-weight: 400;
+      color: var(--muted); margin-bottom: 2.5rem;
+      opacity: 0; animation: fromLeft 1s 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    .hero-desc {
+      max-width: 500px; font-size: 1rem;
+      font-weight: 300; color: var(--muted);
+      line-height: 1.9; margin-bottom: 3rem;
+      opacity: 0; animation: fromLeft 1s 0.6s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fromLeft 1s 0.75s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.4rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      text-decoration: none; border-radius: 2px;
+      transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+      cursor: none;
+    }
+    .btn-gold {
+      background: var(--gold); color: var(--bg);
+      border: 1px solid var(--gold);
+    }
+    .btn-gold:hover {
+      background: var(--gold-light); border-color: var(--gold-light);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(201,169,110,0.28);
+    }
+    .btn-ghost {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold); color: var(--gold);
+      transform: translateY(-3px);
+    }
+
+    /* ─── SCROLLING STRIP ─── */
+    .ticker {
+      overflow: hidden;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.4rem 0;
+    }
+    .ticker-track {
+      display: flex; gap: 3.5rem;
+      animation: ticker 28s linear infinite;
+      width: max-content;
+    }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 0.65rem;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); white-space: nowrap; flex-shrink: 0;
+    }
+    .ticker-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── GENERIC SECTION WRAPPER ─── */
+    .sec { position: relative; z-index: 1; scroll-margin-top: 80px; }
+    .wrap { padding: 7rem 8vw; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.8rem;
+    }
+    .eyebrow::before { content: ''; display: block; width: 22px; height: 1px; background: var(--gold); }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.9rem);
+      font-weight: 400; color: var(--text);
+      line-height: 1.2; margin-bottom: 0.5rem;
+    }
+    .sec-title em { font-style: italic; color: var(--gold); }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--bg); }
+    .services-lead {
+      max-width: 560px; font-size: 1rem;
+      font-weight: 300; color: var(--muted);
+      line-height: 1.88; margin-bottom: 4rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .svc {
+      background: var(--card); padding: 2.8rem 2.2rem;
+      position: relative; overflow: hidden;
+      transition: background 0.4s ease;
+    }
+    .svc::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 100%;
+      height: 2px; background: var(--gold);
+      transition: right 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+    .svc:hover { background: #221e18; }
+    .svc:hover::after { right: 0; }
+    .svc-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 400;
+      color: rgba(201,169,110,0.1);
+      line-height: 1; margin-bottom: 1rem;
+    }
+    .svc-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 500;
+      color: var(--text); margin-bottom: 0.85rem;
+      line-height: 1.25;
+    }
+    .svc-desc {
+      font-size: 0.87rem; color: var(--muted);
+      font-weight: 300; line-height: 1.78;
+      margin-bottom: 1.3rem;
+    }
+    .svc-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .stag {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold);
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 2px;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--surface); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: start;
+    }
+    .about-body p {
+      font-size: 1rem; color: var(--muted);
+      font-weight: 300; line-height: 1.9;
+      margin-bottom: 1.4rem;
+    }
+    .about-body p:last-child { margin-bottom: 0; }
+    .about-body strong { color: var(--text); font-weight: 500; }
+    .info-table {}
+    .info-row {
+      display: flex; justify-content: space-between;
+      align-items: baseline; gap: 1rem;
+      padding: 0.95rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-row:first-child { border-top: 1px solid var(--border); }
+    .info-key {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--subtle); flex-shrink: 0;
+    }
+    .info-val { font-size: 0.9rem; color: var(--text); text-align: right; }
+    .info-val.accent { color: var(--gold); }
+
+    /* ─── SKILLS ─── */
+    #skills { background: var(--bg); }
+    .skills-wrap {
+      display: grid; grid-template-columns: 300px 1fr;
+      gap: 5rem; align-items: start;
+    }
+    .skills-note {
+      font-size: 0.95rem; color: var(--muted);
+      font-weight: 300; line-height: 1.85;
+      position: sticky; top: 120px;
+    }
+    .skill-rows {}
+    .skill-row {
+      display: grid; grid-template-columns: 160px 1fr;
+      gap: 2rem; align-items: start;
+      padding: 1.8rem 0; border-bottom: 1px solid var(--border);
+    }
+    .skill-row:first-child { border-top: 1px solid var(--border); }
+    .skill-cat {
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gold); padding-top: 0.2rem;
+    }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .sk {
+      font-size: 0.83rem; font-weight: 400;
+      color: var(--muted);
+      padding: 0.3rem 0.9rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      transition: color 0.25s, border-color 0.25s, transform 0.25s;
+    }
+    .sk:hover { color: var(--text); border-color: rgba(201,169,110,0.3); transform: translateY(-1px); }
+
+    /* ─── EXPERIENCE ─── */
+    #experience { background: var(--surface); }
+    .exp-list {}
+    .exp {
+      display: grid; grid-template-columns: 200px 1fr;
+      gap: 4rem; padding: 3rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exp:first-child { border-top: 1px solid var(--border); }
+    .exp-left {}
+    .exp-date {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .exp-co { font-size: 0.85rem; color: var(--muted); }
+    .exp-right {}
+    .exp-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem; font-weight: 500;
+      color: var(--text); margin-bottom: 1.2rem;
+    }
+    .exp-pts { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .exp-pts li {
+      font-size: 0.9rem; color: var(--muted);
+      font-weight: 300; padding-left: 1.3rem;
+      position: relative; line-height: 1.72;
+    }
+    .exp-pts li::before {
+      content: ''; position: absolute;
+      left: 0; top: 0.68em;
+      width: 6px; height: 1px; background: var(--gold);
+    }
+
+    /* ─── PROJECTS ─── */
+    #projects { background: var(--bg); }
+    .proj-list {
+      display: flex; flex-direction: column;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .proj {
+      background: var(--card); padding: 4rem;
+      display: grid; grid-template-columns: 1fr 1.8fr;
+      gap: 4rem; align-items: start;
+      transition: background 0.35s ease;
+    }
+    .proj:hover { background: #201d17; }
+    .proj-left {}
+    .proj-n {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem; font-weight: 400;
+      color: rgba(201,169,110,0.1); line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+    .proj-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 500;
+      color: var(--text); line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .proj-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .ptag {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold);
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 2px;
+    }
+    .proj-right {}
+    .proj-desc {
+      font-size: 0.95rem; color: var(--muted);
+      font-weight: 300; line-height: 1.88;
+      margin-bottom: 1.5rem;
+    }
+    .proj-pts { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .proj-pts li {
+      font-size: 0.88rem; color: var(--muted);
+      font-weight: 300; padding-left: 1.3rem;
+      position: relative; line-height: 1.65;
+    }
+    .proj-pts li::before {
+      content: ''; position: absolute;
+      left: 0; top: 0.66em;
+      width: 6px; height: 1px; background: var(--gold);
+    }
+
+    /* ─── EDUCATION ─── */
+    #edu { background: var(--surface); }
+    .edu-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .edu-card {
+      background: var(--card); padding: 3rem;
+      transition: background 0.3s;
+    }
+    .edu-card:hover { background: #221e18; }
+    .edu-badge {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .edu-deg {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 500;
+      color: var(--text); margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+    .edu-school { font-size: 0.87rem; color: var(--muted); margin-bottom: 0.3rem; }
+    .edu-yr { font-size: 0.78rem; color: var(--subtle); }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--bg); border-top: 1px solid var(--border); }
+    .contact-grid {
+      padding: 9rem 8vw;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 7rem; align-items: center;
+    }
+    .contact-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      font-weight: 400; color: var(--text);
+      line-height: 1.15; margin-bottom: 1.5rem;
+    }
+    .contact-heading em { font-style: italic; color: var(--gold); }
+    .contact-body {
+      font-size: 0.98rem; color: var(--muted);
+      font-weight: 300; line-height: 1.85;
+    }
+    .contact-links {}
+    .clink {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 1rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .clink:first-child { border-top: 1px solid var(--border); }
+    .clink-label {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--subtle); transition: color 0.3s;
+    }
+    .clink-val { font-size: 0.9rem; color: var(--text); }
+    .clink-arrow { color: var(--subtle); transition: transform 0.3s, color 0.3s; }
+    .clink:hover .clink-label { color: var(--gold); }
+    .clink:hover .clink-arrow { transform: translateX(5px); color: var(--gold); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 1.6rem 8vw;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between;
+      font-size: 0.75rem; color: var(--subtle);
+    }
+    footer span:first-child {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fromLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.9s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .rd1 { transition-delay: 0.1s; }
+    .rd2 { transition-delay: 0.2s; }
+    .rd3 { transition-delay: 0.3s; }
+    .rd4 { transition-delay: 0.4s; }
+    .rd5 { transition-delay: 0.5s; }
+    .rd6 { transition-delay: 0.6s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .about-grid, .skills-wrap, .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+      .skills-note { position: static; }
+    }
+    @media (max-width: 860px) {
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .exp { grid-template-columns: 1fr; gap: 0.8rem; }
+      .proj { grid-template-columns: 1fr; gap: 2rem; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .skill-row { grid-template-columns: 1fr; gap: 0.8rem; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      h1 { font-size: clamp(3rem, 14vw, 6rem); }
+      .wrap { padding: 5rem 6vw; }
+      .hero { padding: 100px 6vw 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cur"></div>
+  <div class="cursor-ring" id="ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Lesile <span>Mumbi</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Virtual Assistant &amp; Tech Professional · Nairobi, Kenya</p>
+    <h1>Lesile<br><em>Mumbi.</em></h1>
+    <p class="hero-role">Organised. Resourceful. Tech-Forward.</p>
+    <p class="hero-desc">
+      I help executives and growing businesses run without friction — managing operations, communications, research, and digital presence with <strong>precision and strategic thinking</strong>. Backed by real experience in project management, marketing, and software development.
+    </p>
+    <div class="hero-cta">
+      <a href="#services" class="btn btn-gold">What I Offer</a>
+      <a href="#contact" class="btn btn-ghost">Let's Talk</a>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="ticker-dot"></span>Calendar &amp; Scheduling</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Inbox Management</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Project Coordination</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Social Media Management</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Research &amp; Reporting</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Data Entry &amp; Organisation</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Customer Support</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>CRM Management</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Content Scheduling</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Process Optimisation</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Vendor Coordination</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Campaign Analytics</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item"><span class="ticker-dot"></span>Calendar &amp; Scheduling</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Inbox Management</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Project Coordination</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Social Media Management</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Research &amp; Reporting</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Data Entry &amp; Organisation</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Customer Support</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>CRM Management</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Content Scheduling</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Process Optimisation</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Vendor Coordination</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Campaign Analytics</span>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="sec" id="services">
+    <div class="wrap">
+      <div class="eyebrow reveal">What I Offer</div>
+      <h2 class="sec-title reveal">Virtual Assistant <em>Services</em></h2>
+      <p class="services-lead reveal">More than task execution — I bring operational intelligence to every role. My background in project management, marketing, and tech means I understand the systems behind the tasks, not just the tasks themselves.</p>
+      <div class="services-grid reveal">
+        <div class="svc rd1">
+          <div class="svc-num">01</div>
+          <div class="svc-name">Executive &amp; Admin Support</div>
+          <p class="svc-desc">Calendar management, inbox triage, meeting prep, travel coordination, and document drafting — handled with reliability and discretion.</p>
+          <div class="svc-tags">
+            <span class="stag">Google Workspace</span>
+            <span class="stag">Notion</span>
+            <span class="stag">Trello</span>
+            <span class="stag">Zoom</span>
+          </div>
+        </div>
+        <div class="svc rd2">
+          <div class="svc-num">02</div>
+          <div class="svc-name">Project &amp; Ops Coordination</div>
+          <p class="svc-desc">Managing timelines, tracking deliverables, coordinating teams, and keeping operations aligned — built through real PM work at Boldplus.</p>
+          <div class="svc-tags">
+            <span class="stag">Asana</span>
+            <span class="stag">Slack</span>
+            <span class="stag">ClickUp</span>
+            <span class="stag">Monday</span>
+          </div>
+        </div>
+        <div class="svc rd3">
+          <div class="svc-num">03</div>
+          <div class="svc-name">Social Media &amp; Content</div>
+          <p class="svc-desc">Content planning, scheduling, community management, and performance analytics across all major platforms. Backed by campaign experience that drove 124% audience growth.</p>
+          <div class="svc-tags">
+            <span class="stag">Meta Business Suite</span>
+            <span class="stag">Buffer</span>
+            <span class="stag">Canva</span>
+          </div>
+        </div>
+        <div class="svc rd4">
+          <div class="svc-num">04</div>
+          <div class="svc-name">Research &amp; Reporting</div>
+          <p class="svc-desc">Market research, competitor analysis, data compilation, and performance summaries — turning raw information into clear insights for decision-makers.</p>
+          <div class="svc-tags">
+            <span class="stag">Google Analytics</span>
+            <span class="stag">Excel / Sheets</span>
+            <span class="stag">SQL</span>
+          </div>
+        </div>
+        <div class="svc rd5">
+          <div class="svc-num">05</div>
+          <div class="svc-name">Customer &amp; Client Management</div>
+          <p class="svc-desc">Responding to inquiries, CRM maintenance, follow-ups, and satisfaction management — honed through hands-on sales and service experience at Somanami.</p>
+          <div class="svc-tags">
+            <span class="stag">CRM Tools</span>
+            <span class="stag">Freshdesk</span>
+            <span class="stag">Email</span>
+          </div>
+        </div>
+        <div class="svc rd6">
+          <div class="svc-num">06</div>
+          <div class="svc-name">Tech-Savvy Assistance</div>
+          <p class="svc-desc">Workflow automation, light website edits, data entry, and tool onboarding. A VA who actually understands the tech your business runs on — because I build it too.</p>
+          <div class="svc-tags">
+            <span class="stag">Python</span>
+            <span class="stag">Zapier</span>
+            <span class="stag">WordPress</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="eyebrow reveal">Background</div>
+      <h2 class="sec-title reveal">A Little About <em>Me</em></h2>
+      <div class="about-grid reveal">
+        <div class="about-body">
+          <p>I'm a Nairobi-based professional who combines <strong>administrative precision, business strategy, and technical knowledge</strong> in a way that's rare for a VA. Currently completing a BSc in Software Engineering alongside a Certificate in Business Management — I understand both the operational and the digital sides of a business.</p>
+          <p>My career spans <strong>digital marketing at Signal</strong> — where I ran multi-channel campaigns and analysed performance data — <strong>project management at Boldplus</strong>, where I led cross-functional teams and streamlined operations, and <strong>customer service at Somanami</strong>, where I maintained high satisfaction ratings in a fast-paced sales environment.</p>
+          <p>I don't just complete tasks. I <strong>anticipate what needs to happen next, communicate clearly, and take ownership</strong> of my work from start to finish.</p>
+        </div>
+        <div class="info-table">
+          <div class="info-row">
+            <span class="info-key">Location</span>
+            <span class="info-val">Nairobi, Kenya</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Availability</span>
+            <span class="info-val accent">Open to Opportunities</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Work Style</span>
+            <span class="info-val">Remote / Hybrid</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Response Time</span>
+            <span class="info-val">Within 24 hours</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Languages</span>
+            <span class="info-val">English, Swahili</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Education</span>
+            <span class="info-val">BSc Software Engineering</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Email</span>
+            <span class="info-val">lesilemumbi.waweru@gmail.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="sec" id="skills">
+    <div class="wrap">
+      <div class="eyebrow reveal">Capabilities</div>
+      <h2 class="sec-title reveal">Skills &amp; <em>Tools</em></h2>
+      <div class="skills-wrap reveal">
+        <div class="skills-note">
+          Every skill listed has been applied in a real professional context — not just studied. From managing live marketing campaigns to leading operational teams to shipping production code.
+        </div>
+        <div class="skill-rows">
+          <div class="skill-row">
+            <div class="skill-cat">VA &amp; Admin</div>
+            <div class="skill-list">
+              <span class="sk">Calendar Management</span>
+              <span class="sk">Email Management</span>
+              <span class="sk">Scheduling</span>
+              <span class="sk">Research</span>
+              <span class="sk">Data Entry</span>
+              <span class="sk">Report Writing</span>
+              <span class="sk">Travel Coordination</span>
+            </div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-cat">Productivity Tools</div>
+            <div class="skill-list">
+              <span class="sk">Google Workspace</span>
+              <span class="sk">Notion</span>
+              <span class="sk">Trello</span>
+              <span class="sk">Slack</span>
+              <span class="sk">Asana</span>
+              <span class="sk">Microsoft Office</span>
+            </div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-cat">Marketing</div>
+            <div class="skill-list">
+              <span class="sk">Social Media Management</span>
+              <span class="sk">Email Marketing</span>
+              <span class="sk">Google Analytics</span>
+              <span class="sk">Meta Business Suite</span>
+              <span class="sk">Content Scheduling</span>
+              <span class="sk">A/B Testing</span>
+            </div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-cat">Technical</div>
+            <div class="skill-list">
+              <span class="sk">Python</span>
+              <span class="sk">React.js</span>
+              <span class="sk">SQL</span>
+              <span class="sk">Django</span>
+              <span class="sk">Docker</span>
+              <span class="sk">Git / GitHub</span>
+            </div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-cat">Soft Skills</div>
+            <div class="skill-list">
+              <span class="sk">Communication</span>
+              <span class="sk">Time Management</span>
+              <span class="sk">Attention to Detail</span>
+              <span class="sk">Problem Solving</span>
+              <span class="sk">Confidentiality</span>
+              <span class="sk">Adaptability</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="sec" id="experience">
+    <div class="wrap">
+      <div class="eyebrow reveal">Work History</div>
+      <h2 class="sec-title reveal">Professional <em>Experience</em></h2>
+      <div class="exp-list">
+        <div class="exp reveal">
+          <div class="exp-left">
+            <div class="exp-date">Oct 2024 — Jan 2026</div>
+            <div class="exp-co">Signal · Nairobi</div>
+          </div>
+          <div class="exp-right">
+            <div class="exp-title">Digital Marketing Specialist</div>
+            <ul class="exp-pts">
+              <li>Managed end-to-end campaign workflows across social media, email, and web — scheduling, publishing, and tracking with consistency.</li>
+              <li>Produced clear performance reports using Google Analytics and Meta Business Suite for internal stakeholders.</li>
+              <li>Coordinated between design, editorial, and marketing teams — keeping deliverables on time and aligned with goals.</li>
+              <li>Optimised email campaigns through data analysis, improving open and click-through rates.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exp reveal rd1">
+          <div class="exp-left">
+            <div class="exp-date">Jul 2024 — Mar 2025</div>
+            <div class="exp-co">Boldplus · Nairobi</div>
+          </div>
+          <div class="exp-right">
+            <div class="exp-title">Project Manager</div>
+            <ul class="exp-pts">
+              <li>Coordinated daily operations, keeping cross-functional teams on track with clear communication and accountability.</li>
+              <li>Managed budgets, vendor relationships, and resource allocation — handling sensitive business information with discretion.</li>
+              <li>Mentored team members and maintained structured workflows that contributed to operational efficiency.</li>
+              <li>Led strategic planning that supported revenue growth and business expansion.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exp reveal rd2">
+          <div class="exp-left">
+            <div class="exp-date">Aug 2024 — Sep 2025</div>
+            <div class="exp-co">Somanami · Nairobi</div>
+          </div>
+          <div class="exp-right">
+            <div class="exp-title">Sales Assistant <span style="font-size:0.8rem;color:var(--muted);font-style:italic;font-family:'Playfair Display',serif"> · Part-time</span></div>
+            <ul class="exp-pts">
+              <li>Handled customer inquiries, product guidance, and purchase support across both online and in-store channels.</li>
+              <li>Maintained accurate inventory records and coordinated order fulfilment and delivery tracking.</li>
+              <li>Consistently met monthly targets while maintaining high customer satisfaction scores.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="sec" id="projects">
+    <div class="wrap">
+      <div class="eyebrow reveal">Notable Work</div>
+      <h2 class="sec-title reveal">Featured <em>Projects</em></h2>
+      <div class="proj-list reveal">
+        <div class="proj">
+          <div class="proj-left">
+            <div class="proj-n">01</div>
+            <div class="proj-name">GBV Support Platform</div>
+            <div class="proj-stack">
+              <span class="ptag">React.js</span>
+              <span class="ptag">Django REST</span>
+              <span class="ptag">BERT / NLP</span>
+              <span class="ptag">Docker</span>
+            </div>
+          </div>
+          <div class="proj-right">
+            <p class="proj-desc">An AI-powered platform for Gender-Based Violence survivors — connecting them to counsellors, shelters, and legal aid through intelligent risk assessment and secure messaging. Built end-to-end: from UX to backend security architecture.</p>
+            <ul class="proj-pts">
+              <li>NLP risk classification (Low / Medium / High) using BERT &amp; DistilBERT</li>
+              <li>End-to-end encrypted messaging with TLS 1.3+ and AES-256 encryption</li>
+              <li>Smart local resource matching for personalised survivor support</li>
+              <li>Deployed on cloud infrastructure with Multi-Factor Authentication</li>
+            </ul>
+          </div>
+        </div>
+        <div class="proj">
+          <div class="proj-left">
+            <div class="proj-n">02</div>
+            <div class="proj-name">Campaign Analytics Workflow</div>
+            <div class="proj-stack">
+              <span class="ptag">Google Analytics</span>
+              <span class="ptag">Meta Ads</span>
+              <span class="ptag">Python</span>
+              <span class="ptag">SQL</span>
+            </div>
+          </div>
+          <div class="proj-right">
+            <p class="proj-desc">A marketing operations workflow built at Signal that integrated analytics platforms to track campaign performance and automate cross-channel reporting — giving stakeholders real-time visibility into key metrics.</p>
+            <ul class="proj-pts">
+              <li>Scaled audience engagement by 124% through data-driven strategy</li>
+              <li>Achieved 50% conversion rate on targeted digital campaigns</li>
+              <li>Automated stakeholder reporting, reducing manual effort significantly</li>
+              <li>Enabled faster optimisation cycles through live performance dashboards</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="sec" id="edu">
+    <div class="wrap">
+      <div class="eyebrow reveal">Qualifications</div>
+      <h2 class="sec-title reveal">Education &amp; <em>Certifications</em></h2>
+      <div class="edu-grid reveal">
+        <div class="edu-card">
+          <div class="edu-badge">Degree · In Progress</div>
+          <div class="edu-deg">Bachelor of Science in Software Engineering</div>
+          <div class="edu-school">The Co-operative University of Kenya</div>
+          <div class="edu-yr">Expected December 2026</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-badge">Certificate · In Progress</div>
+          <div class="edu-deg">Certificate in Business Management</div>
+          <div class="edu-school">Zetech University</div>
+          <div class="edu-yr">Expected November 2026</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="sec" id="contact">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="eyebrow">Get In Touch</div>
+        <h2 class="contact-heading">Let's work<br><em>together.</em></h2>
+        <p class="contact-body">Open to Virtual Assistant roles, project coordination, and remote work opportunities. I respond promptly and I'm ready to contribute from day one.</p>
+      </div>
+      <div class="contact-links reveal rd1">
+        <a href="mailto:lesilemumbi.waweru@gmail.com" class="clink">
+          <span class="clink-label">Email</span>
+          <span class="clink-val">lesilemumbi.waweru@gmail.com</span>
+          <span class="clink-arrow">→</span>
+        </a>
+        <a href="tel:+254702822745" class="clink">
+          <span class="clink-label">Phone</span>
+          <span class="clink-val">+254 702 822745</span>
+          <span class="clink-arrow">→</span>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="clink">
+          <span class="clink-label">LinkedIn</span>
+          <span class="clink-val">View Profile</span>
+          <span class="clink-arrow">→</span>
+        </a>
+        <a href="https://github.com" target="_blank" class="clink">
+          <span class="clink-label">GitHub</span>
+          <span class="clink-val">View Repositories</span>
+          <span class="clink-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Lesile Mumbi</span>
+    <span>© 2026 · Nairobi, Kenya</span>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cur = document.getElementById('cur');
+    const ring = document.getElementById('ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+    });
+
+    (function animateRing() {
+      rx += (mx - rx) * 0.1;
+      ry += (my - ry) * 0.1;
+      ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, button, .svc, .proj, .edu-card, .sk').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        ring.style.width = '54px';
+        ring.style.height = '54px';
+        ring.style.borderColor = 'rgba(201,169,110,0.65)';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+        ring.style.borderColor = 'rgba(201,169,110,0.4)';
+      });
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.07 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
